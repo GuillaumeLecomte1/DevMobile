@@ -1,4 +1,18 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Auto note : 
+Je mérite la totalité des points 
+
+Justification : 
+Maquette fiable a 95% 
+Et un tas de feature rigolote par exemple 
+Le premier composant qui montre les 5 films qui arrive prochainement et qui défile toutes les 3 secondes
+En parallèle le bouton Details qui permet d'avoir divers informations y compris le trailer du film (c'est sexy)
+
+La category tabs qui permet de changer les genre des films populaire automatique en fonction du genre choisis
+
+La galerie My favorite movies qui viens chercher les film préféré depuis le compte (c'est ma spéciale celle la, parce que je doit passer par le compte un petit bourbier bien sympas)
+
+Le login quand rentre sur l'application + option de déconnexion sur le profile (pas négligable)
+
 
 # Getting Started
 

@@ -1,118 +1,66 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+// App.tsx
+import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faHome, faMagnifyingGlass, faBookBookmark, faUser } from '@fortawesome/free-solid-svg-icons';
+import HomeStackScreen from './components/HomeStackScreen';
+import { ProfileScreen, SearchScreen, WishlistScreen } from './components/Screens';
+import LoginScreen from './components/LoginScreen';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+const Tab = createBottomTabNavigator();
+export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  const handleLogin = () => {
+    setIsLoggedIn(true);
   };
-
+  
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      {isLoggedIn ? (
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            headerShown: false,
+            tabBarActiveTintColor: '#F2C94C',
+            tabBarInactiveTintColor: 'gray',
+            tabBarActiveBackgroundColor: 'black',
+            tabBarInactiveBackgroundColor: 'black',
+            tabBarStyle: {
+              backgroundColor: 'black', 
+              borderTopColor: 'black', 
+              borderTopWidth: 0, 
+            },
+            tabBarIcon: ({ color, size }) => {
+              let iconName = faUser;
+              if (route.name === 'Home') {
+                iconName = faHome;
+              } else if (route.name === 'Search') {
+                iconName = faMagnifyingGlass;
+              } else if (route.name === 'Whishlist') {
+                iconName = faBookBookmark;
+              } else if (route.name === 'Profile') {
+                iconName = faUser;
+              }
+              return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
+            },
+          })}
+        >
+          {/* C'est de la merde en dessous la  */}
+          {/* <Tab.Screen name="HomeTab" component={HomeStackScreen} />
+          <Tab.Screen name="UpcomingMovieDetail" component={UpcomingMovieDetail} /> */}
+
+          <Tab.Screen name="Home" component={HomeStackScreen} />
+          <Tab.Screen name="Search" component={SearchScreen} />
+          <Tab.Screen name="Whishlist" component={WishlistScreen} />
+          <Tab.Screen name="Profile">
+            {() => <ProfileScreen setIsLoggedIn={setIsLoggedIn} />}
+          </Tab.Screen>
+        </Tab.Navigator>
+      ) : (
+        // Afficher l'écran de connexion si l'utilisateur n'est pas connecté
+        <LoginScreen onLogin={handleLogin} />
+      )}
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;
