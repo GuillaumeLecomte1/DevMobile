@@ -2,12 +2,18 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useTheme } from '../ThemeContext';
 
-export default function FavoriteMovieSection({ title, data, onPressItem }) {
+export default function FavoriteMovieSection({ title, data, onPressItem, onSeeMore }) {
+  const { isDarkMode } = useTheme(); // Accès au contexte du thème
+
   return (
     <View style={styles.sectionContainer}>
       <View style={styles.titleContainer}>
-        <Text style={styles.sectionTitle}>{title}</Text>
+        <Text style={[styles.sectionTitle, isDarkMode ? styles.darkText : styles.lightText]}>{title}</Text>
+        <TouchableOpacity onPress={onSeeMore}>
+          <Text style={styles.seeMore}>See more</Text>
+        </TouchableOpacity>
       </View>
       <FlatList
         bounces={false}
@@ -19,9 +25,9 @@ export default function FavoriteMovieSection({ title, data, onPressItem }) {
             <Image source={{ uri: item.image }} style={styles.movieImage} />
             
             {/* Overlay pour le mot-clé et la notation en bas de l'image */}
-            <View style={styles.bottomOverlay}>
-              <Text style={styles.keywordText} numberOfLines={1} ellipsizeMode="tail">
-                {item.title} 
+            <View style={[styles.bottomOverlay, isDarkMode ? styles.darkOverlay : styles.lightOverlay]}>
+              <Text style={[styles.keywordText, isDarkMode ? styles.darkText : styles.lightText]} numberOfLines={1} ellipsizeMode="tail">
+                {item.title}
               </Text>
               <View style={styles.ratingContainer}>
                 <Icon name="star" size={14} color="#FFC107" />
@@ -41,18 +47,27 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between', // Assure que le titre et "See more" sont aux extrémités
     alignItems: 'center',
     marginBottom: 10,
   },
   sectionTitle: {
-    color: '#fff',
     fontSize: 20,
-    marginBottom: 5,
-    fontFamily: 'Gilroy-Regular',
+    fontFamily: 'Gilroy-semibold',
+  },
+  seeMore: {
+    color: '#FFC107',
+    fontSize: 14,
+    fontFamily: 'Gilroy-semibold',
+  },
+  darkText: {
+    color: '#FFF',
+  },
+  lightText: {
+    color: '#000',
   },
   itemContainer: {
-    marginRight: 10,
+    marginRight: 16,
     width: 120,
     position: 'relative',
   },
@@ -65,7 +80,7 @@ const styles = StyleSheet.create({
   bottomOverlay: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'left',
+    alignItems: 'center',
     position: 'absolute',
     bottom: 5,
     left: 5,
@@ -75,8 +90,8 @@ const styles = StyleSheet.create({
   },
   keywordText: {
     flex: 1,
-    color: '#fff',
-    fontSize: 12,
+    fontSize: 10,
+    fontFamily: 'Gilroy-semibold',
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -84,8 +99,9 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     color: '#FFC107',
-    fontSize: 12,
+    fontSize: 10,
     marginLeft: 2,
-    fontWeight: 'bold',
-  },
+    fontFamily: 'Gilroy-semibold',
+ },
 });
+ 

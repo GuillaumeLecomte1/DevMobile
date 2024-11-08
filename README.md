@@ -1,18 +1,46 @@
 # Auto note : 
-Je mérite la totalité des points 
 
-Justification : 
-Maquette fiable a 95% 
-Et un tas de feature rigolote par exemple 
-Le premier composant qui montre les 5 films qui arrive prochainement et qui défile toutes les 3 secondes
-En parallèle le bouton Details qui permet d'avoir divers informations y compris le trailer du film (c'est sexy)
+## Style 
+**Modes lumineux et sombre :** Prise en charge du dark mode et du light mode pour une meilleure accessibilité.
 
-La category tabs qui permet de changer les genre des films populaire automatique en fonction du genre choisis
+**Typographie :** Utilisation de la police Gilroy avec différentes variations pour s'aligner avec les types de polices de la maquette.
+Respect des dimensions et proportions : Alignement rigoureux avec les tailles de conteneurs et de boutons.
 
-La galerie My favorite movies qui viens chercher les film préféré depuis le compte (c'est ma spéciale celle la, parce que je doit passer par le compte un petit bourbier bien sympas)
+**Texte et catégorisation :** Texte respecté à l'identique jusqu'au "lorem ipsum". Les catégories "Sport" et "Kids" ont été remplacées par "Drama" et "Family" pour s’aligner avec les genres disponibles via l’API TMDB.
 
-Le login quand rentre sur l'application + option de déconnexion sur le profile (pas négligable)
+**Affichage des titres de films :** Limitation de la longueur des titres pour conserver un rendu esthétique sur les affiches. Bien qu’un overlay légèrement opaque puisse améliorer la lisibilité, j’ai choisi de ne pas l'utiliser pour respecter fidèlement la maquette.
 
+## Code 
+**Git :** Maitrise de git imparable.
+
+**Librairies :** Utilisation de librairies diverses pour optimiser le temps de développement.
+
+**Structuration :** Bon usage de composants React, des hooks tels que useEffect, et de JavaScript de manière générale.
+
+**Appel à l’API TMDB :** Multiples usages de l’API TMDB pour enrichir le contenu de l’application.
+
+**Améliorations futures :** Avec plus de temps, un refactoring pourrait être envisagé pour optimiser certains composants et organiser les fichiers de manière plus structurée. Utiliser davantage le contexte pour le style et certaines fonctionnalités serait également un axe d'amélioration.
+
+
+## Fonctionnalité 
+**Authentification :** Fonctionnalité de login pour accéder à l'application, avec option de déconnexion depuis le profil utilisateur. 
+Pas de login ou de mot de passe, c'est un simple boolean permettant la connexion, une amélioration future serait de lié cette application a une base de donnée pour obtenire de vrai identifiant de connexion.
+
+**Switch Dark Mode/Light Mode :** Un bouton switch dans l'onglet Profile, permet de basculer entre les modes clair et sombre.
+
+**Affichage des films à venir :** Un composant affiche les cinq prochains films, défilant toutes les 3 secondes, avec un bouton "Détails" pour chaque film, offrant des informations supplémentaires, y compris la bande-annonce du film.
+
+**Catégories de films populaires :** Les genres des films populaires peuvent être changés via des onglets, avec le genre sélectionné affiché à côté du titre "Popular Movies".
+
+**Effet de Blur :** Effet de flou appliqué sur les catégories pour une meilleure esthétique.
+
+**Galerie des films favoris :** Les films ajoutés en favoris sont récupérés via le profil utilisateur. Il s'agit de la seconde selection de films.
+
+**Recherche et Wishlist :** Un onglet de recherche permet de trouver des films et de les ajouter à une wishlist. Les films peuvent être supprimés de la wishlist, bien que celle-ci soit stockée localement et se réinitialise après chaque build de l'application. Une sauvegarde permanente pourrait être envisagée pour de futures versions
+
+
+## Justification : 
+La maquette a été reproduite avec une précision d'environ 95%, et les fonctionnalités additionnelles ajoutées compensent les 5% restants, justifiant ainsi la totalité des points pour cette réalisation fidèle.
 
 # Getting Started
 

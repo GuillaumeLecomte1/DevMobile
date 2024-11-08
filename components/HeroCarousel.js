@@ -6,12 +6,14 @@ import { TMDB_API_KEY } from '@env';
 import CategoryTabs from './CategoryTabs';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useTheme } from '../ThemeContext';
 
-
-export default function HeroCarousel({  selectedCategory, onCategoryChange}) {
+export default function HeroCarousel({ selectedCategory, onCategoryChange }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [heroImages, setHeroImages] = useState([]);
-const navigation = useNavigation();
+  const navigation = useNavigation();
+  const { isDarkMode } = useTheme(); // Utilisation du contexte de thème
+
   useEffect(() => {
     const fetchUpcomingMovies = async () => {
       try {
@@ -47,7 +49,7 @@ const navigation = useNavigation();
       navigation.navigate('UpcomingMovieDetail', { movieId: selectedMovie.id });
     }
   };
-
+  
   if (!heroImages.length) {
     return null;
   }
@@ -59,41 +61,36 @@ const navigation = useNavigation();
           <CategoryTabs selectedCategory={selectedCategory} onCategoryChange={onCategoryChange} />
         </View>
         <LinearGradient 
-          colors={['transparent', 'rgba(0,0,0,1)']} 
+          colors={['transparent', isDarkMode ? 'rgba(0,0,0,1)' : 'rgba(255,255,255,1)']}
           style={styles.gradient}
           pointerEvents="box-none"
         >
-            <View style={styles.listDiscoverContainer}>
-            <Text style={styles.listDiscoverText}>My list</Text>
-            <Text style={styles.listDiscoverText}>Discover</Text>
+          <View style={styles.listDiscoverContainer}>
+            <Text style={[styles.listDiscoverText, isDarkMode ? styles.darkText : styles.lightText]}>My list</Text>
+            <Text style={[styles.listDiscoverText, isDarkMode ? styles.darkText : styles.lightText]}>Discover</Text>
           </View>
-          
           <View style={styles.heroButtons}>
-          <TouchableOpacity style={styles.buttonWishlist}>
-          <Icon name="add" size={20} color="#fff" />
-          <Text style={styles.buttonTextWishlist}>  Wishlist</Text>
-        </TouchableOpacity>
-            <TouchableOpacity style={styles.heroButton} onPress={handleDetailsPress}>
-              <Text style={styles.buttonText}>Details</Text>
+            <TouchableOpacity style={[styles.buttonWishlist, isDarkMode ? styles.darkButton : styles.lightButton]}>
+              <Icon name="add" size={20} color="#fff" paddingRight={12}/>
+              <Text style={styles.buttonTextWishlist}>Wishlist</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.heroButton, isDarkMode ? styles.lightHighlightButton : styles.lightHighlightButton]} onPress={handleDetailsPress}>
+              <Text style={[styles.buttonTextDetails, isDarkMode ? styles.darkButtonText : styles.lightButtonText]}>Details</Text>
             </TouchableOpacity>
           </View>
         </LinearGradient>
       </ImageBackground>
-      <View style={styles.dotsContainer}>
-
+      <View style={[styles.dotsContainer, isDarkMode ? styles.darkDotsBackground : styles.lightDotsBackground]}>
         {heroImages.map((_, index) => (
           <View
             key={index}
-            style={[styles.dot, currentIndex === index && styles.activeDot]}
+            style={[styles.dot, isDarkMode ? styles.dotLight : styles.dotDark, currentIndex === index && styles.activeDot]}
           />
         ))}
       </View>
     </View>
   );
 }
-
-// Styles inchangés...
-
 
 const styles = StyleSheet.create({
   container: {
@@ -105,7 +102,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     position: 'relative',
-    // marginBottom: 20,
   },
   categoryContainer: {
     position: 'absolute',
@@ -125,27 +121,37 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '60%',
-    marginBottom: 10,
+    marginBottom: 24,
   },
   listDiscoverText: {
-    color: '#fff',
     fontSize: 16,
-    fontFamily:'Gilroy-Regular',
-    marginBottom: 10,
-    // fontStyle:'thin',
+    fontFamily: 'Gilroy-Medium',
+  },
+  darkText: {
+    color: '#fff',
+  },
+  lightText: {
+    color: '#000',
   },
   dotsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    // marginTop: 10,
-    backgroundColor: 'black',
-    // marginTop: 20,
   },
-  dot: {
+  darkDotsBackground: {
+    backgroundColor: '#000',
+  },
+  dotLight: {
     width: 6,
     height: 6,
     borderRadius: 5,
     backgroundColor: '#fff',
+    marginHorizontal: 5,
+  },
+  dotDark: {
+    width: 6,
+    height: 6,
+    borderRadius: 5,
+    backgroundColor: '#D3D3D3',
     marginHorizontal: 5,
   },
   activeDot: {
@@ -157,32 +163,44 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   heroButton: {
-    backgroundColor: '#FFC107',
-    paddingLeft: 40,
-    paddingRight: 40,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingHorizontal: 32,
+    paddingVertical: 14,
     borderRadius: 8,
-    marginHorizontal: 10,
+    marginLeft: 16,
+    height: 48,
+    alignItems: 'center',
+  },
+  darkButton: {
+    backgroundColor: '#333333',
+  },
+  lightHighlightButton: {
+    backgroundColor: '#FFC107',
   },
   buttonWishlist: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#424141',
+    height: 48,
     paddingHorizontal: 32,
-    paddingVertical: 10,
+    paddingVertical: 14,
     borderRadius: 8,
-    marginHorizontal: 10,
+    
   },
   
   buttonTextWishlist: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 'semibold',
+    fontFamily: 'Gilroy-semibold',
   },
-  buttonText: {
+  buttonTextDetails: {
     color: '#000',
     fontSize: 16,
-    fontWeight: 'semibold',
+    fontFamily: 'Gilroy-semibold',
+  },
+  darkButtonText: {
+    color: '#000',
+  },
+  lightButtonText: {
+    color: '#fff',
   },
 });

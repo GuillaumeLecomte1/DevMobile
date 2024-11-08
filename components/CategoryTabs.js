@@ -51,25 +51,18 @@ const styles = StyleSheet.create({
   container: {
     width: Dimensions.get('window').width * 0.9,
     alignSelf: 'center',
-    borderRadius: 30,
     overflow: 'hidden',
     position: 'relative',
-  },
-  blurBackground: {
-    // ...StyleSheet.absoluteFillObject,
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0, // Ajustez les valeurs pour réduire l'effet
-    right: 0, // Ajustez les valeurs pour réduire l'effet
     borderRadius: 20,
   },
+  blurBackground: {
+    ...StyleSheet.absoluteFillObject,
+  },
   flatList: {
-    zIndex: 1, // Assure que la FlatList est rendue au-dessus du BlurView
+    zIndex: 1, // Assure que la FlatList est rendue au-dessus du BlurView 
   },
   flatListContent: {
     justifyContent: 'space-around',
-    paddingHorizontal: 10,
   },
   categoryTab: {
     paddingVertical: 10,
@@ -78,15 +71,18 @@ const styles = StyleSheet.create({
   },
   activeCategoryTab: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
     paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 50, // Rond comme un cercle
   },
   categoryText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#FFFFFF',
+    fontFamily: 'Gilroy-Medium',
   },
   activeCategoryText: {
     color: '#000000',
-    fontWeight: 'bold',
+    fontFamily: 'Gilroy-Bold',
   },
 });
+

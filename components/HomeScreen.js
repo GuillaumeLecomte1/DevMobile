@@ -4,17 +4,18 @@ import { TMDB_API_KEY, TMDB_ACCESS_TOKEN } from '@env';
 import HeroCarousel from './HeroCarousel';
 import MovieSection from './MovieSection';
 import FavoriteMovieSection from './FavoriteMovieSection';
+import { useTheme } from '../ThemeContext';
 
 export default function HomeScreen({ navigation }) {
   const [movies, setMovies] = useState([]);
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All'); // L'état de la catégorie sélectionnée est ici
-
+  const { isDarkMode } = useTheme(); // Accès au contexte du thème
+  
   useEffect(() => {
     fetchMovies();
     fetchFavoriteMovies();
   }, [selectedCategory]); // fetchMovies est appelé lorsque selectedCategory change
-
 
   const fetchMovies = async () => {
     try {
@@ -67,21 +68,10 @@ export default function HomeScreen({ navigation }) {
     setSelectedCategory(category);
   };
 
-  // const handleMoviePress = (movieId) => {
-  //   navigation.navigate('HomeTab', {
-  //     screen: 'MovieDetail',
-  //     params: { movieId },
-  //   });
-  // };
   const handleMoviePress = (movieId) => {
     navigation.push('MovieDetail', { movieId });
   };
   
-  
-  
-  
-  
-
   const getGenreId = (categoryName) => {
     const genres = {
       Romance: 10749,
@@ -95,24 +85,22 @@ export default function HomeScreen({ navigation }) {
   };  
 
   return (
-    <ScrollView bounces={false} >
-<HeroCarousel selectedCategory={selectedCategory} onCategoryChange={handleCategoryChange} />
-<View style={styles.container}>
+    <ScrollView bounces={false} style={[styles.container, isDarkMode ? styles.darkBackground : styles.lightBackground]}>
+      <HeroCarousel selectedCategory={selectedCategory} onCategoryChange={handleCategoryChange} />
+      <View style={styles.content}>
         <MovieSection
           title={`Popular Movies - ${selectedCategory}`}
-          
           data={movies.map((movie) => ({
-            id: movie.id, // Ajoutez l'ID ici
+            id: movie.id,
             title: movie.title,
             image: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
             rating: movie.vote_average,
           }))}
-          onPressItem={handleMoviePress} // Passez la fonction ici
+          onPressItem={handleMoviePress}
         />
-
-        {/* Partie Favorite movies */}
-        {/* {favoriteMovies.length > 0 && (
-          <MovieSection
+        
+        {favoriteMovies.length > 0 && (
+          <FavoriteMovieSection
             title="My Favorite Movies"
             data={favoriteMovies.map((movie) => ({
               id: movie.id,
@@ -120,33 +108,21 @@ export default function HomeScreen({ navigation }) {
               image: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
               rating: movie.vote_average,
             }))}
-            onPressItem={handleMoviePress} // Passez la fonction ici
-
+            onPressItem={handleMoviePress}
           />
-        )} */}
-        {favoriteMovies.length > 0 && (
-  <FavoriteMovieSection
-    title="My Favorite Movies"
-    data={favoriteMovies.map((movie) => ({
-      id: movie.id,
-      title: movie.title,
-      image: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-      rating: movie.vote_average,
-    }))}
-    onPressItem={handleMoviePress}
-  />
         )}
 
-    {/* Ajout de la partie black friday  */}
-      <Image source={require('./img/blackfriday.png')} style={styles.blackfriday}/>
-      {/* <Image source={{ uri: 'https://ds.static.rtbf.be/article/image/1920x1080/4/a/8/7e185cc0ad0a719c730af5354d7142c1-1599656786.jpg' }} style={styles.heroImage} /> */}
-       <Text style={styles.promoText}>Black friday is here!</Text>
-      <Text>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Soluta ipsam ex itaque accusantium, nemo facere.</Text>
-      <View style={styles.promoBanner}>
-        <TouchableOpacity>
-          <Text style={styles.buttonText}>Check details</Text>
-        </TouchableOpacity>
-      </View>
+        {/* Black Friday Section */}
+        <Image source={require('./img/blackfriday.png')} style={styles.blackfriday} />
+        <Text style={[styles.promoText, isDarkMode ? styles.darkText : styles.lightText]}>Black Friday is here!</Text>
+        <Text style={[styles.descriptionText, isDarkMode ? styles.darkText : styles.lightText]}>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Viverra sociis pulvinar auctor nibh iaculis id.
+        </Text>
+        <View style={styles.promoBanner}>
+          <TouchableOpacity>
+            <Text style={[styles.buttonText, isDarkMode ? styles.darkButtonText : styles.lightButtonText]}>Check details</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   );
@@ -155,7 +131,14 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  darkBackground: {
     backgroundColor: '#000',
+  },
+  lightBackground: {
+    backgroundColor: '#FFF',
+  },
+  content: {
     padding: 16,
   },
   sectionHeader: {
@@ -165,7 +148,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   sectionTitle: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -182,28 +164,44 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   promoText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'semibold',
+    fontSize: 16,
+    fontFamily: 'Gilroy-SemiBold',
     marginBottom: 10,
+  },
+  descriptionText: {
+    fontSize: 12,
+    fontFamily: 'Gilroy-Medium',
+    marginBottom: 10,
+  },
+  darkText: {
+    color: '#FFF',
+  },
+  lightText: {
+    color: '#000',
   },
   promoBanner: {
     marginTop: 20,
     backgroundColor: '#FFC107',
-    padding: (0, 14),
+    paddingVertical: 10,
+    paddingHorizontal: 14,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
   },
-  buttonText: {
+  darkButtonText: {
     color: '#000',
     fontSize: 16,
-    fontFamily: 'Gilroy-Regular',
-    fontWeight: 'semibold',
+    fontFamily: 'Gilroy-semibold',
+    fontWeight: 'bold',
+  },
+  lightButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontFamily: 'Gilroy-semibold',
+    fontWeight: 'bold',
   },
   blackfriday: {
     marginBottom: 10,
-    marginTop: 20,
   },
 });
